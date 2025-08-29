@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="ja">
+
+  <head>
+    <script type="text/x-mathjax-config">
+
+       MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});
+
+    </script>
+
+    <script type="text/javascript" async 
+
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+
+    </script>
+
+  </head>
+
+  <body>
+    <h3>零次ホールドとz変換</h3>
+
+    <h3>§ステップ関数</h3>
+    <p>ステップ関数\(u(t)\)を次式で定義します。</p>
+    \begin{align}
+      u(t) =
+      \left\{
+        \begin{array}{@{\,}cc}
+          0&(t < 0)\\
+          1&(t \ge 0)
+        \end{array}
+      \right.  \label{eq:StepFunc}
+    \end{align}
+
+    <p>ステップ関数\(u(t)\)を使うと、
+      次式のように\(T\)秒間だけ\(1\)で、
+      それ以外は\(0\)になる関数を作れます。</p>
+    \begin{align}
+      h(t)=~u(t) - u(t-T) =
+      \left\{
+        \begin{array}{@{\,}cc}
+           1&(0\le t < T)\\
+           0&(t \le 0,~~t\ge T)
+        \end{array}
+      \right.  \label{eq:HoldFunc}
+    \end{align}
+    <h3>§零次ホールド</h3>
+    <p>関数\eqref{eq:HoldFunc}を使うと時間関数\(f(t)\)を\(T\)秒間一定の値として保持(ホールド)することができます。
+      このように\(T\)秒間一定の値としてデータを保持することを零次ホールドといいます。
+      零次ホールド関数\eqref{eq:HoldFunc}を使うと、
+      時間関数\(f(t)~(t\ge 0)\)に対して\(T\)秒間隔でデータを採取保持(サンプルホールド)した時間関数\(\bar f(t)\)を次式で記述できます。</p>
+    \begin{align}
+     \left.
+      \begin{array}{@{\,}rl}
+      \bar f(t) &= f(0)h(t)\ + f(T)h(t-T) + f(2T)h(t-2T)\cdots\\
+       &= \displaystyle\sum_{k=0}^\infty f(kT)h(t-kT)\}
+      \end{array}
+      \right.   \label{eq:0Hold}
+    \end{align}
+
+    <h3>§ステップ関数と零次ホールド関数のLaplace変換</h3>
+    <p>ステップ関数のLaplace変換\(U(s)\)は次式となります。</p>
+    \begin{align}
+      U(s) = \frac{1}{s} \label{eq:StepLaplace}
+    \end{align}
+
+    <p>したがって、ホールド関数のLaplace変換\(H(s)\)は次式となります。</p>
+    \begin{align}
+      H(s) = \frac{1-e^{-Ts}}{s} \label{eq:HoldLaplace}
+    \end{align}
+
+    <p>さらに\(\bar f(t)\)のLaplace変換\(\bar F(s)\)は次式となります。</p>
+    \begin{align}
+      \left.
+       \begin{array}{@{\,}rl}
+        \bar F(s) &= \displaystyle\sum_{k=0}^\infty f(kT)e^{-kTs}\displaystyle\frac{(1-e^{-Ts})}{s}\\
+                  &= \displaystyle\frac{(1-e^{-Ts})}{s}\sum_{k=0}^\infty f(kT)e^{-kTs}
+       \end{array}
+      \right.   \label{eq:FuncLaplace}
+    \end{align}
+
+    <p>式\eqref{eq:FuncLaplace}の\(f(kT)\)を\(f(k)\)と表記し、\(F(e^{-Ts})\)を次式で定義します。</p>
+    \begin{align}
+      F(e^{-Ts}) = \sum_{k=0}^\infty f(k)e^{-kTs}  \label{eq:Fast}\\
+    \end{align}
+
+    <p>式\eqref{eq:Fast}により式\eqref{eq:FuncLaplace}は次式となります。</p>
+    \begin{align}
+      \bar F(s) = \displaystyle\frac{(1-e^{-Ts})}{s}F(e^{-Ts})  \label{eq:FuncLaplace2}\\
+    \end{align}
+
+  <h3>§z変換</h3>
+    <p>式\eqref{eq:Fast}において\(e^{-Ts}=z\)に置き換えることで\(f(k)\)のz変換を次式で定義します。</p>
+    \begin{align}
+      F(z) = \sum_{k=0}^\infty f(k)z^k = f(0) + f(1)z + f(2)z^2 + f(3) z^3+ \cdots  \label{eq:zTrabs}
+    \end{align}
+
+    <p><a href="https://aoyamakohbo.github.io/Craftlogy/">->TOP</a></p>
+</body>
+
+</html>
