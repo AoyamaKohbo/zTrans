@@ -18,84 +18,94 @@
   </head>
 
   <body>
-    <h3>零次ホールドとz変換</h3>
+    <h3>デジタルフィルター</h3>
+    <h3>§IIR(Infinit Inpulse Reponce)デジタルフィルター</h3>
 
-    <h3>§ステップ関数</h3>
-    <p>ステップ関数\(u(t)\)を次式で定義します。</p>
+    <p>IIRデジタルフィルターは次式となります。</p>
     \begin{align}
-      u(t) =
-      \left\{
-        \begin{array}{@{\,}cc}
-          0&(t < 0)\\
-          1&(t \ge 0)
-        \end{array}
-      \right.  \label{eq:StepFunc}
+      y(n) = - \sum_{k=1}^{N} a_{k}y(n-k) + \sum_{k=0}^{M} b_{k}u(n-k)  \label{eq:DgtFltr}
+    \end{align}
+    <p>ここに、\(N\)はフィルター次数です。</p>
+
+    <p>デジタルフィルター\eqref{eq:DgtFltr}を<a href="https://aoyamakohbo.github.io/zTrans/">z変換</a>すると次式となります。</p>
+    \begin{align}
+      \sum_{k=0}^{N} a_{k} z^{-k} Y(z) = \sum_{k=0}^{M} b_{k}z^{-k}U(z),~~~a_0=1.  \label{eq:Z_Trns}
     \end{align}
 
-    <p>ステップ関数\(u(t)\)を使うと、
-      次式のように\(T\)秒間だけ\(1\)で、
-      それ以外は\(0\)になる関数を作れます。</p>
+    <p>伝達関数\(H(z)=Y(z)/U(z)\)は次式となります。</p>
     \begin{align}
-      h(t)=~u(t) - u(t-T) =
-      \left\{
-        \begin{array}{@{\,}cc}
-           1&(0\le t < T)\\
-           0&(t \le 0,~~t\ge T)
-        \end{array}
-      \right.  \label{eq:HoldFunc}
-    \end{align}
-    <h3>§零次ホールド</h3>
-    <p>関数\eqref{eq:HoldFunc}を使うと時間関数\(f(t)\)を\(T\)秒間一定の値として保持(ホールド)することができます。
-      このように\(T\)秒間一定の値としてデータを保持することを零次ホールドといいます。
-      零次ホールド関数\eqref{eq:HoldFunc}を使うと、
-      時間関数\(f(t)~(t\ge 0)\)に対して\(T\)秒間隔でデータを採取保持(サンプルホールド)した時間関数\(\bar f(t)\)を次式で記述できます。</p>
-    \begin{align}
-     \left.
-      \begin{array}{@{\,}rl}
-      \bar f(t) &= f(0)h(t)\ + f(T)h(t-T) + f(2T)h(t-2T)\cdots\\
-       &= \displaystyle\sum_{k=0}^\infty f(kT)h(t-kT)\}
-      \end{array}
-      \right.   \label{eq:0Hold}
+      H(z) = \frac{\displaystyle\sum_{k=0}^{M} b_{k}z^{-k}}{\displaystyle\sum_{k=0}^{N} a_{k} z^{-k}},~~~a_0=1.  \label{eq:TranFunc}\\
     \end{align}
 
-    <h3>§ステップ関数と零次ホールド関数のLaplace変換</h3>
-    <p>ステップ関数のLaplace変換\(U(s)\)は次式となります。</p>
+    <p>伝達関数\eqref{eq:TranFunc}の振幅二乗特性は次式となります。</p>
     \begin{align}
-      U(s) = \frac{1}{s} \label{eq:StepLaplace}
+      |H(z)|^2 = \frac{|\displaystyle\sum_{k=0}^M b_{k}z^{-k}|^2}{|\displaystyle\sum_{k=0}^N a_{k} z^{-k}|^2} = \frac{\tan^2(\omega_cT/2)(1 + z^{-1})^{2N}}{\tan^2(\omega_cT/2)(1 + z^{-1})^{2N} + (-1)^N(1 - z^{-1})^{2N}}  \label{eq:QuafrProp}\\
     \end{align}
 
-    <p>したがって、ホールド関数のLaplace変換\(H(s)\)は次式となります。</p>
+    <h3>§IIRデジタルフィルターの設計手順</h3>
+    <p>ここではIIRデジタルフィルターとしてバタワース低域フィルターの設計手順を示します。
+  </p>
+    <p>まず、遮断角周波数\(\omega_c\)として、減衰周波数\(\omega_a\)、\(\omega_a\)での減衰量\(A\)を設定し、
+      フィルター次数\(N\)を次式で計算します。</p>
     \begin{align}
-      H(s) = \frac{1-e^{-Ts}}{s} \label{eq:HoldLaplace}
+      N = \frac{1}{2}\frac{\log(10^{A/10}-1)}{\log\displaystyle\frac{\tan(\omega_a T/2)}{\tan(\omega_c T/2)}} \label{eq:FiltDim}\\
     \end{align}
-
-    <p>さらに\(\bar f(t)\)のLaplace変換\(\bar F(s)\)は次式となります。</p>
+    
+    <p>次に伝達関数の振幅二乗特性\eqref{eq:QuafrProp}の\(2N\)個の極(\(p_r = x_r + jy_r\))、\(r=0,1,\cdots,2N-1\)を次式で計算します。</p>
+    <p>\(N\)が偶数の場合</p>
     \begin{align}
       \left.
-       \begin{array}{@{\,}rl}
-        \bar F(s) &= \displaystyle\sum_{k=0}^\infty f(kT)e^{-kTs}\displaystyle\frac{(1-e^{-Ts})}{s}\\
-                  &= \displaystyle\frac{(1-e^{-Ts})}{s}\sum_{k=0}^\infty f(kT)e^{-kTs}
-       \end{array}
-      \right.   \label{eq:FuncLaplace}
+        \begin{array}{@{\,}cl}
+          x_r &= \displaystyle\frac{1-\tan^2\displaystyle\frac{\omega_c T}{2}}{1+2\tan\displaystyle\frac{\omega_c T}{2}\cos(\displaystyle\frac{2r+1}{2N}\pi)+\tan^2\displaystyle\frac{\omega_c T}{2}}\\
+          y_r &= \displaystyle\frac{-2\tan^2\displaystyle\frac{\omega_c}{2}\sin(\frac{2r+1}{2N}\pi)}{1+2\tan\displaystyle\frac{\omega_c}{2}\cos(\displaystyle\frac{2r+1}{2N}\pi)+\tan^2\displaystyle\frac{\omega_c T}{2}}
+        \end{array}
+      \right\}  \label{eq:PoleOfTrnFncEvn}
     \end{align}
-
-    <p>式\eqref{eq:FuncLaplace}の\(f(kT)\)を\(f(k)\)と表記し、\(F(e^{-Ts})\)を次式で定義します。</p>
+    <p>\(N\)が奇数の場合</p>
     \begin{align}
-      F(e^{-Ts}) = \sum_{k=0}^\infty f(k)e^{-kTs}  \label{eq:Fast}\\
+      \left.
+        \begin{array}{@{\,}cl}
+          x_r &= \displaystyle\frac{1-\tan^2\displaystyle\frac{\omega_c T}{2}}{1+2\tan\displaystyle\frac{\omega_c T}{2}\cos(\displaystyle\frac{r}{N}\pi)+\tan^2\displaystyle\frac{\omega_c T}{2}}\\
+          y_r &= \displaystyle\frac{-2\tan^2\displaystyle\frac{\omega_c T}{2}\sin(\frac{r}{N}\pi)}{1+2\tan\displaystyle\frac{\omega_c T}{2}\cos(\displaystyle\frac{r}{N}\pi)+\tan^2\displaystyle\frac{\omega_c T}{2}}
+        \end{array}
+      \right\}  \label{eq:PoleOfTrnFncOdd}
     \end{align}
 
-    <p>式\eqref{eq:Fast}により式\eqref{eq:FuncLaplace}は次式となります。</p>
+    <p>式\eqref{eq:PoleOfTrnFncEvn}、\eqref{eq:PoleOfTrnFncOdd}は\(z^{-1}\)平面で定義されているので
+      伝達関数\eqref{eq:TranFunc}が安定であるためには、
+      式\eqref{eq:PoleOfTrnFncEvn}または\eqref{eq:PoleOfTrnFncOdd}の\(2N\)個の極の中から単位円外の\(N\)個の極(\(p_k = x_k + jy_k,~|p_k|>1,k=0,1,\cdots,N-1\))を選びます。</p>
+
+    <p>伝達関数の振幅二乗特性\eqref{eq:QuafrProp}から伝達関数\eqref{eq:TranFunc}は次式となることがわかります(\(M=N\))。</p>
     \begin{align}
-      \bar F(s) = \displaystyle\frac{(1-e^{-Ts})}{s}F(e^{-Ts})  \label{eq:FuncLaplace2}\\
+      H(z) = \frac{K(1 + z^{-1})^{N}}{\displaystyle\prod_{k=0}^{N-1} (1-\frac{z^{-1}}{p_k})}  \label{eq:TranFunc2}\\
     \end{align}
 
-  <h3>§z変換</h3>
-    <p>式\eqref{eq:Fast}において\(e^{-Ts}=z\)に置き換えることで\(f(k)\)のz変換を次式で定義します。</p>
+    <p>伝達関数\eqref{eq:TranFunc2}\(\omega=0\)(\(z=e^{j\omega T}=1\))のとき\(|H(z)|=1\)となるので、</p>
     \begin{align}
-      F(z) = \sum_{k=0}^\infty f(k)z^k = f(0) + f(1)z + f(2)z^2 + f(3) z^3+ \cdots  \label{eq:zTrabs}
+      K = \frac{1} {2^{N}}\prod_{k=0}^{N-1} (1-\frac{1}{p_k}). \label{eq:Coef_K}\\
     \end{align}
 
-    <p><a href="https://aoyamakohbo.github.io/Craftlogy/">->TOP</a></p>
+    <p>フィルター係数\(a_k\)は式\eqref{eq:TranFunc2}の分母:
+      \((1-\displaystyle\frac{z^{-1}}{p_0})(1-\displaystyle\frac{z^{-1}}{p_1})\cdots(1-\displaystyle\frac{z^{-1}}{p_{N-1}})\)
+      を展開した\(z^{-k}\)の係数となり、</p>
+    \begin{align}
+      \left.
+        \begin{array}{@{\,}cl}
+          a_0 &= 1\\
+          a_1 &= \displaystyle\frac{1}{p_0}+\cdots+\frac{1}{p_N}\\
+          a_2 &= \displaystyle\frac{1}{p_0p_1}+\frac{1}{p_0p_2}+\cdots+\frac{1}{p_{N-2}p_{N-1}}\\
+          \cdots &=~ \cdots\\
+          a_{N} &= \displaystyle\frac{1}{p_0p_1 \cdots p_{N-1}}
+        \end{array}
+      \right\} . \label{eq:FiltCoef_A}
+    \end{align}
+
+  <p>フィルター係数\(b_k\)は二項定理により式\eqref{eq:TranFunc2}の分子を展開した\(z^{-k}\)の係数となります。</p>
+    \begin{align}
+      b_k &= K~{}_{N-k} \mathrm{ C }_k,~~~k=0,1,\cdots,N . \label{eq:FiltCoef_B}
+    \end{align}
+      
+   <p><a href="https://aoyamakohbo.github.io/Craftlogy/">->TOP</a></p>
 </body>
 
 </html>
