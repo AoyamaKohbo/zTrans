@@ -59,17 +59,17 @@
     \end{align}
 
     <h3>§ステップ関数と零次ホールド関数のLaplace変換</h3>
-    <p>ステップ関数\eqref{eq:StepFunc}のLaplace変換\(U(s)\)は次式となります。</p>
+    <p>ステップ関数\eqref{eq:StepFunc}の<a href="https://aoyamakohbo.github.io/Laplace/">Laplace変換</a>Laplace変換\(U(s)\)は次式となります。</p>
     \begin{align}
       U(s) = \frac{1}{s} \label{eq:StepLaplace}
     \end{align}
 
-    <p>したがって、ホールド関数\eqref{eq:HoldFunc}のLaplace変換\(H(s)\)は次式となります。</p>
+    <p>したがって、ホールド関数\eqref{eq:HoldFunc}の<a href="https://aoyamakohbo.github.io/Laplace/">Laplace変換</a>\(H(s)\)は次式となります。</p>
     \begin{align}
       H(s) = \frac{1-e^{-Ts}}{s} \label{eq:HoldLaplace}
     \end{align}
 
-    <p>さらに\(\bar f(t)\)のLaplace変換\(\bar F(s)\)は次式となります。</p>
+    <p>さらに\(\bar f(t)\)の<a href="https://aoyamakohbo.github.io/Laplace/">Laplace変換</a>\(\bar F(s)\)は次式となります。</p>
     \begin{align}
       \left.
        \begin{array}{@{\,}rl}
@@ -95,8 +95,9 @@
       F(z) = \sum_{k=0}^\infty f(k)z^{-k} = f(0) + f(1)z^{-1} + f(2)z^{-2} + f(3) z^{-3}+ \cdots  \label{eq:zTrans}
     \end{align}
 
+  <h3>§z変換の性質</h3>
     <p>ここで、\(f(0)=0\)として、\(f(k)\)のz変換\eqref{eq:zTrans}の両辺に\(z\)を乗じて\(F^\prime(z)=zF(z)\)、
-      \(F^\prime(z)\)のz変換前の信号を\(f^\prime(k)\)します。</p>
+      \(F^\prime(z)\)のz変換前の信号を\(f^\prime(k)\)とします。</p>
     \begin{align}
       F^\prime(z) = zF(z) = \sum_{k=0}^\infty f(k+1)z^{-k} = \sum_{k=0}^\infty f^\prime(k)z^{-k} \label{eq:zTrans3}
     \end{align}
