@@ -59,12 +59,12 @@
     \end{align}
 
     <h3>§ステップ関数と零次ホールド関数のLaplace変換</h3>
-    <p>ステップ関数のLaplace変換\(U(s)\)は次式となります。</p>
+    <p>ステップ関数\eqref{eq:StepFunc}のLaplace変換\(U(s)\)は次式となります。</p>
     \begin{align}
       U(s) = \frac{1}{s} \label{eq:StepLaplace}
     \end{align}
 
-    <p>したがって、ホールド関数のLaplace変換\(H(s)\)は次式となります。</p>
+    <p>したがって、ホールド関数\eqref{eq:HoldFunc}のLaplace変換\(H(s)\)は次式となります。</p>
     \begin{align}
       H(s) = \frac{1-e^{-Ts}}{s} \label{eq:HoldLaplace}
     \end{align}
@@ -79,9 +79,9 @@
       \right.   \label{eq:FuncLaplace}
     \end{align}
 
-    <p>式\eqref{eq:FuncLaplace}の\(f(kT)\)を\(f(k)\)と表記し、\(F(e^{-Ts})\)を次式で定義します。</p>
+    <p>式\eqref{eq:FuncLaplace}の\(f(kT)\)を\(f(k)\)と表記し、\(F(e^{Ts})\)を次式で定義します。</p>
     \begin{align}
-      F(e^{-Ts}) = \sum_{k=0}^\infty f(k)e^{-kTs}  \label{eq:Fast}\\
+      F(e^{Ts}) = \sum_{k=0}^\infty f(k)e^{-kTs}  \label{eq:Fast}\\
     \end{align}
 
     <p>式\eqref{eq:Fast}により式\eqref{eq:FuncLaplace}は次式となります。</p>
@@ -92,16 +92,17 @@
   <h3>§z変換</h3>
     <p>式\eqref{eq:Fast}において\(e^{-Ts}=z\)に置き換えることで\(f(k)\)のz変換を次式で定義します。</p>
     \begin{align}
-      F(z) = \sum_{k=0}^\infty f(k)z^k = f(0) + f(1)z + f(2)z^2 + f(3) z^3+ \cdots  \label{eq:zTrans}
+      F(z) = \sum_{k=0}^\infty f(k)z^{-k} = f(0) + f(1)z^{-1} + f(2)z^{-2} + f(3) z^{-3}+ \cdots  \label{eq:zTrans}
     \end{align}
 
-    <p>\(f(k)\)のz変換\eqref{eq:zTrans}の両辺に\(z\)を乗じて\(F^\prime(z)=zF(z)\)とします。</p>
+    <p>ここで、\(f(0)=0\)として、\(f(k)\)のz変換\eqref{eq:zTrans}の両辺に\(z\)を乗じて\(F^\prime(z)=zF(z)\)、
+      \(F^\prime(z)\)のz変換前の信号を\(f^\prime(k)\)します。</p>
     \begin{align}
-      F^\prime(z) &=~ zF(z) = f(0)z + f(1)z^2 + f(2)z^3 + f(3) z^4+ \cdots  \label{eq:zTrans2}\\
-        &=~ f^\prime(1)z + f^\prime(2)z^2 + f^\prime(3) z^3+ \cdots \label{eq:zTrans3}
+      F^\prime(z) = zF(z) = \sum_{k=0}^\infty f(k+1)z^{-k} = \sum_{k=0}^\infty f^\prime(k)z^{-k} \label{eq:zTrans3}
     \end{align}
 
-  <p>式\eqref{eq:zTrans2}と\eqref{eq:zTrans3}の\(z\)の係数を比較すると、\(f(k+1)=f^\prime(k)\)となっています。
+  <p>\(z^{-k}\)の係数を比較すると、
+    \(f(k+1)=f^\prime(k)\)となっています。
     つまり、\(f(k+1)\)のz変換は\(zF(z)\)になります。</p>
   <p>逆に、\(f^\prime(k-1)=f(k)\)となっているので、\(f^\prime(k-1)\)のz変換は\(z^{-1}F^\prime(z)\)になります。</p>
 
